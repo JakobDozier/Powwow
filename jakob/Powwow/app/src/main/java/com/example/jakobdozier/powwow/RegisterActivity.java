@@ -17,6 +17,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,6 +34,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private ProgressDialog progressDialog;
 
     private FirebaseAuth firebaseAuth;
+
+    private FirebaseFirestore firebaseFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
         register.setOnClickListener(this);
         back.setOnClickListener(this);
     }
@@ -58,6 +66,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String lastName = lName.getText().toString().trim();
         String email = emailRegister.getText().toString().trim();
         String password = passwordRegister.getText().toString().trim();
+
+        Map<String, Object> newUser = new HashMap<>();
 
         if (TextUtils.isEmpty(firstName)) {
             //email is empty
