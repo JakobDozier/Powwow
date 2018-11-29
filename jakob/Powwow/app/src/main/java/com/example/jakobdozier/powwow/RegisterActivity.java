@@ -67,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String email = emailRegister.getText().toString().trim();
         String password = passwordRegister.getText().toString().trim();
 
-        Map<String, Object> newUser = new HashMap<>();
+//        Map<String, Object> newUser = new HashMap<>();
 
         if (TextUtils.isEmpty(firstName)) {
             //email is empty
