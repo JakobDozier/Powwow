@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firestore.v1beta1.UpdateDocumentRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,8 +68,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String email = emailRegister.getText().toString().trim();
         String password = passwordRegister.getText().toString().trim();
 
-        Map<String, Object> newUser = new HashMap<>();
-
         if (TextUtils.isEmpty(firstName)) {
             //email is empty
             Toast.makeText(this, "Please enter your first name", Toast.LENGTH_SHORT).show();
@@ -101,6 +100,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            String firstName = fName.getText().toString().trim();
+                            String lastName = lName.getText().toString().trim();
+                            String email = emailRegister.getText().toString().trim();
+                            long inv = 1;
+                            Map<String, Object> mUserProfile = new HashMap<>();
+                            mUserProfile.put("username", firstName+lastName);
+                            mUserProfile.put("email", email);
+                            mUserProfile.put("firstName", firstName);
+                            mUserProfile.put("lastName", lastName);
+                            mUserProfile.put("inversions", inv);
+                            firebaseFirestore.collection("users").document(firebaseAuth.getCurrentUser().getUid()).set(mUserProfile);
                             Toast.makeText(RegisterActivity.this, "Registered", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                         }

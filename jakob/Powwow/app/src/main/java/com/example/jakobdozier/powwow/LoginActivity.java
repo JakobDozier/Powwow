@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -26,13 +28,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView register;
 
     private ProgressDialog progressDialog;
-
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        firebaseFirestore.setFirestoreSettings(settings);
 
         emailLogin = findViewById(R.id.editText_email);
         passwordLogin = findViewById(R.id.editText_password);
