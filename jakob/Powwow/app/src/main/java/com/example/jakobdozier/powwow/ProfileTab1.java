@@ -3,6 +3,7 @@ package com.example.jakobdozier.powwow;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
+import static android.support.constraint.Constraints.TAG;
+
 public class ProfileTab1 extends Fragment {
 
     private static final String KEY_USERNAME = "username";
     private static final String KEY_EMAIL = "email";
-    private static final String KEY_FIRSTNAME = "fistName";
+    private static final String KEY_FIRSTNAME = "firstName";
     private static final String KEY_LASTNAME = "lastName";
 
     private TextView userName;
@@ -43,10 +46,7 @@ public class ProfileTab1 extends Fragment {
         fName = rootView.findViewById(R.id.textViewFirstName);
         lName = rootView.findViewById(R.id.textViewLastName);
 
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
-                .build();
-        firebaseFirestore.setFirestoreSettings(settings);
+        Log.d(TAG, "Display name for user: "+firebaseAuth.getCurrentUser().getDisplayName());
 
         firebaseFirestore.collection("users").document(firebaseAuth.getCurrentUser().getUid()).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
