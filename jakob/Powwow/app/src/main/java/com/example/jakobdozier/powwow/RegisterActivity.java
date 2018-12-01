@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firestore.v1beta1.UpdateDocumentRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,6 +105,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             String lastName = lName.getText().toString().trim();
                             String email = emailRegister.getText().toString().trim();
                             long inv = 1;
+
                             Map<String, Object> mUserProfile = new HashMap<>();
                             mUserProfile.put("username", firstName+lastName);
                             mUserProfile.put("email", email);
@@ -111,6 +113,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             mUserProfile.put("lastName", lastName);
                             mUserProfile.put("inversions", inv);
                             firebaseFirestore.collection("users").document(firebaseAuth.getCurrentUser().getUid()).set(mUserProfile);
+
+                            Map<String, ArrayList> mUserInterests = new HashMap<>();
+                            mUserInterests.put("Active", new ArrayList<String>());
+                            mUserInterests.put("Games", new ArrayList<String>());
+                            mUserInterests.put("Movies", new ArrayList<String>());
+                            mUserInterests.put("Social", new ArrayList<String>());
+                            mUserInterests.put("Sports", new ArrayList<String>());
+                            mUserInterests.put("Videogames", new ArrayList<String>());
+                            mUserInterests.put("Totals", new ArrayList<Integer>());
+                            firebaseFirestore.collection("interest").document(firebaseAuth.getCurrentUser().getUid()).set(mUserInterests);
+
                             Toast.makeText(RegisterActivity.this, "Registered", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                         }

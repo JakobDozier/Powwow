@@ -1,5 +1,6 @@
 package com.example.jakobdozier.powwow;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class ProfileTab1 extends Fragment {
+public class ProfileTab1 extends Fragment implements View.OnClickListener {
 
     private static final String KEY_USERNAME = "username";
     private static final String KEY_EMAIL = "email";
@@ -31,6 +33,7 @@ public class ProfileTab1 extends Fragment {
     private TextView email;
     private TextView fName;
     private TextView lName;
+    private Button addInterests;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -45,6 +48,7 @@ public class ProfileTab1 extends Fragment {
         email = rootView.findViewById(R.id.textViewEmail);
         fName = rootView.findViewById(R.id.textViewFirstName);
         lName = rootView.findViewById(R.id.textViewLastName);
+        addInterests = rootView.findViewById(R.id.AddInterestButton);
 
         Log.d(TAG, "Display name for user: "+firebaseAuth.getCurrentUser().getDisplayName());
 
@@ -75,6 +79,13 @@ public class ProfileTab1 extends Fragment {
                     }
                 });
 
+        addInterests.setOnClickListener(this);
+
         return rootView;
+    }
+
+    @Override
+    public void onClick(View view) {
+        startActivity(new Intent(getActivity(),AddInterestActivity.class));
     }
 }
