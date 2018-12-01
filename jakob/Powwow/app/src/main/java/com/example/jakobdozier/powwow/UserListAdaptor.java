@@ -48,10 +48,10 @@ public class UserListAdaptor extends RecyclerView.Adapter<UserListAdaptor.ViewHo
             super(itemView);
             mView = itemView;
 
-            firstNameText = (TextView) mView.findViewById(R.id.firstName);
+            firstNameText = (TextView) mView.findViewById(R.id.groupName);
             lastNameText = (TextView) mView.findViewById(R.id.lastName);
             ageText = (TextView) mView.findViewById(R.id.age);
-            usernameText = (TextView) mView.findViewById(R.id.username);
+            usernameText = (TextView) mView.findViewById(R.id.groupDescription);
         }
     }
 }
