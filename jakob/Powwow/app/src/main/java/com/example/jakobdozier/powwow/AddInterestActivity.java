@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AddInterestActivity extends AppCompatActivity implements View.OnClickListener {
@@ -30,7 +31,7 @@ public class AddInterestActivity extends AppCompatActivity implements View.OnCli
     private ArrayList<String> listOfSocial = new ArrayList<String>();
     private ArrayList<String> listOfSports = new ArrayList<String>();
     private ArrayList<String> listOfVideogames = new ArrayList<String>();
-    ArrayList<Integer> totals = new ArrayList<Integer>();
+    ArrayList<Long> totals = new ArrayList<Long>();
 
     private ArrayList<String> currActive = new ArrayList<String>();
     private ArrayList<String> currGames = new ArrayList<String>();
@@ -92,68 +93,45 @@ public class AddInterestActivity extends AppCompatActivity implements View.OnCli
 
     public void submit() {
 
-        firebaseFirestore.collection("users").document(mAuth.getCurrentUser().getUid()).get()
+        firebaseFirestore.collection("interest").document(mAuth.getCurrentUser().getUid()).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
-//                            if (documentSnapshot.get("Active") != null){
-//                                currActive = (ArrayList<String>) documentSnapshot.get("Active");
-//                            }
-//                            if (documentSnapshot.get("Games") != null){
-//                                currActive = (ArrayList<String>) documentSnapshot.get("Games");
-//                            }
-//                            if (documentSnapshot.get("Movies") != null){
-//                                currActive = (ArrayList<String>) documentSnapshot.get("Movies");
-//                            }
-//                            if (documentSnapshot.get("Social") != null){
-//                                currActive = (ArrayList<String>) documentSnapshot.get("Social");
-//                            }
-//                            if (documentSnapshot.get("Sports") != null){
-//                                currActive = (ArrayList<String>) documentSnapshot.get("Sports");
-//                            }
-//                            if (documentSnapshot.get("Videogames") != null){
-//                                currActive = (ArrayList<String>) documentSnapshot.get("Videogames");
-//                            }
-//                            if (!currActive.isEmpty()){
-//                                listOfActive.addAll(currActive);
-//                            }
-//                            if (!currGames.isEmpty()){
-//                                listOfGames.addAll(currGames);
-//                            }
-//                            if (!currMovies.isEmpty()){
-//                                listOfMovies.addAll(currMovies);
-//                            }
-//                            if (!currSocial.isEmpty()){
-//                                listOfSocial.addAll(currSocial);
-//                            }
-//                            if (!currSports.isEmpty()){
-//                                listOfSports.addAll(currSports);
-//                            }
-//                            if (!currVideogames.isEmpty()){
-//                                listOfVideogames.addAll(currVideogames);
-//                            }
-                            totals.add(listOfActive.size());
-                            totals.add(listOfGames.size());
-                            totals.add(listOfMovies.size());
-                            totals.add(listOfSocial.size());
-                            totals.add(listOfSports.size());
-                            totals.add(listOfVideogames.size());
 
-                            Map<String, ArrayList> mUserInterests = new HashMap<>();
-                            mUserInterests.put("Active", listOfActive);
-                            mUserInterests.put("Games", listOfGames);
-                            mUserInterests.put("Movies", listOfMovies);
-                            mUserInterests.put("Social", listOfSocial);
-                            mUserInterests.put("Sports", listOfSports);
-                            mUserInterests.put("Videogames", listOfVideogames);
-                            mUserInterests.put("Totals", totals);
+                            ArrayList<Long> mTotals = (ArrayList<Long>) documentSnapshot.get("Totals");
+
+                            totals.add(listOfActive.size()+mTotals.get(0));
+                            totals.add(listOfGames.size()+mTotals.get(1));
+                            totals.add(listOfMovies.size()+mTotals.get(2));
+                            totals.add(listOfSocial.size()+mTotals.get(3));
+                            totals.add(listOfSports.size()+mTotals.get(4));
+                            totals.add(listOfVideogames.size()+mTotals.get(5));
 
                             for (int i = 0; i < listOfActive.size();i++){
                                 firebaseFirestore.collection("interest").document(mAuth.getCurrentUser().getUid()).update("Active",FieldValue.arrayUnion(listOfActive.get(i)));
                             }
 
-                            //add inversions to profile
+                            for (int i = 0; i < listOfGames.size();i++){
+                                firebaseFirestore.collection("interest").document(mAuth.getCurrentUser().getUid()).update("Games",FieldValue.arrayUnion(listOfGames.get(i)));
+                            }
+
+                            for (int i = 0; i < listOfMovies.size();i++){
+                                firebaseFirestore.collection("interest").document(mAuth.getCurrentUser().getUid()).update("Movies",FieldValue.arrayUnion(listOfMovies.get(i)));
+                            }
+
+                            for (int i = 0; i < listOfSocial.size();i++){
+                                firebaseFirestore.collection("interest").document(mAuth.getCurrentUser().getUid()).update("Social",FieldValue.arrayUnion(listOfSocial.get(i)));
+                            }
+
+                            for (int i = 0; i < listOfSports.size();i++){
+                                firebaseFirestore.collection("interest").document(mAuth.getCurrentUser().getUid()).update("Sports",FieldValue.arrayUnion(listOfSports.get(i)));
+                            }
+                            for (int i = 0; i < listOfVideogames.size();i++){
+                                firebaseFirestore.collection("interest").document(mAuth.getCurrentUser().getUid()).update("Videogames",FieldValue.arrayUnion(listOfVideogames.get(i)));
+                            }
+
+                            firebaseFirestore.collection("interest").document(mAuth.getCurrentUser().getUid()).update("Totals",totals);
                             getInversions(totals);
                         }
 
@@ -190,7 +168,7 @@ public class AddInterestActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public void getInversions(ArrayList<Integer> arr){
+    public void getInversions(ArrayList<Long> arr){
         int inv_count = 0;
         for (int i = 0; i < arr.size() - 1; i++)
             for (int j = i + 1; j < arr.size(); j++)
